@@ -1,0 +1,80 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# =========================
+# Datasets
+# =========================
+data/
+datasets/
+*.zip
+*.rar
+*.7z
+
+# =========================
+# Model weights
+# =========================
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.safetensors
+
+# =========================
+# Checkpoints
+# =========================
+checkpoints/
+organized_models/
+
+# =========================
+# Generated results
+# =========================
+results/
+gradcam_results/
+runs/
+outputs/
+logs/
+
+# =========================
+# TensorBoard
+# =========================
+tensorboard/
+
+# =========================
+# Cache / temporary
+# =========================
+.cache/
+tmp/
+temp/
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.*
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
