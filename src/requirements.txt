@@ -1,0 +1,12 @@
+streamlit>=1.36
+torch
+torchvision
+timm
+pillow
+numpy
+pandas
+matplotlib
+reportlab
+# optional (MedGemma narrative):
+# transformers
+# accelerate
