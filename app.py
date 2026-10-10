@@ -613,8 +613,8 @@ if DEMO:
                 'colour heuristic purely to preview the layout. Open <b>Model status</b> in the sidebar to see why '
                 'each model was skipped.</div>', unsafe_allow_html=True)
 
-tab_an, tab_scan, tab_rob, tab_err, tab_cmp = st.tabs(
-    ["🔬 Image Analysis", "🗺️ Tissue Scanner", "🌪️ Robustness Lab", "🔍 Error Analysis", "📊 Model Comparison"])
+tab_an, tab_err, tab_cmp = st.tabs(
+    ["🔬 Image Analysis", "🔍 Error Analysis", "📊 Model Comparison"])
 
 
 def current_image():
@@ -769,76 +769,6 @@ with tab_an:
             d2.download_button("Download technical report (PDF)", make_pdf(rep, [work, heat, over]), "crc_lens_report.pdf")
         else:
             d2.caption("Install `reportlab` to enable the PDF report.")
-
-# ============================== Tissue Scanner ==============================
-with tab_scan:
-    work, name = current_image()
-    if work is None:
-        st.info("Analyze an image first (Image Analysis tab).")
-    else:
-        st.markdown(f"Splits the image into tiles and scores each with **{primary}** to show *where* suspicious "
-                    f"tissue is concentrated.")
-        n = st.slider("Grid size (n × n)", 2, 8, 4)
-        S = work.size[0]
-        tiles = [work.crop((c * S // n, r * S // n, (c + 1) * S // n, (r + 1) * S // n)) for r in range(n) for c in range(n)]
-        pr = aca_list(tiles, primary).reshape(n, n)
-        left, right = st.columns([1, 1])
-        with left:
-            fig, ax = plt.subplots(figsize=(4.2, 4.2))
-            ax.imshow(pr, vmin=0, vmax=1, cmap="magma")
-            for i in range(n):
-                for j in range(n):
-                    ax.text(j, i, f"{pr[i, j]:.2f}", ha="center", va="center", fontsize=8,
-                            color="white" if pr[i, j] < 0.6 else "black")
-            ax.set_xticks([]); ax.set_yticks([])
-            fig.patch.set_facecolor("#0e1117")
-            st.pyplot(fig)
-            plt.close(fig)
-        with right:
-            st.metric("Suspicious tiles (≥ 0.5)", f"{int((pr >= 0.5).sum())} / {n * n}")
-            r_ = st.slider("Inspect row", 1, n, 1) - 1
-            c_ = st.slider("Inspect column", 1, n, 1) - 1
-            st.image(tiles[r_ * n + c_].resize((200, 200)), width=200,
-                     caption=f"Tile ({r_ + 1},{c_ + 1}) · adenocarcinoma {pr[r_, c_]:.1%}")
-        sm = np.clip(np.asarray(Image.fromarray(pr.astype(np.float32)).resize((S, S), Image.BICUBIC)), 0, 1)
-        st.markdown("**Smoothed tile-probability overlay**")
-        show(blend(work, sm))
-
-# ============================== Robustness Lab ==============================
-with tab_rob:
-    work, name = current_image()
-    if work is None:
-        st.info("Analyze an image first (Image Analysis tab).")
-    else:
-        st.markdown(f"Does **{primary}** stay stable under real-world variation (staining, focus, compression)?")
-        kinds = st.multiselect("Perturbations", ["Brightness", "Contrast", "Blur", "Stain shift (pink↔purple)",
-                                                 "JPEG compression", "Rotation"],
-                               default=["Brightness", "Blur", "Stain shift (pink↔purple)"])
-        lv = np.linspace(-1, 1, 9)
-        base = float(aca_list([work], primary)[0])
-        fig, ax = plt.subplots(figsize=(7.5, 3.8))
-        worst = 0.0
-        for k in kinds:
-            ps = aca_list([perturb(work, k, l) for l in lv], primary)
-            worst = max(worst, float(np.abs(ps - base).max()))
-            ax.plot(lv, ps, marker="o", label=k)
-        ax.axhline(0.5, ls="--", c="grey")
-        ax.set_ylim(-0.02, 1.02); ax.set_xlabel("Perturbation strength"); ax.set_ylabel("Adenocarcinoma probability")
-        if kinds:
-            ax.legend(fontsize=8)
-        st.pyplot(fig)
-        plt.close(fig)
-        st.metric("Stability score", f"{(1 - worst):.0%}", help="1 − largest probability swing across perturbations")
-        if kinds:
-            k = st.selectbox("Preview a perturbation", kinds)
-            s = st.slider("Strength", -1.0, 1.0, 0.5, 0.1)
-            pv = perturb(work, k, s)
-            x1, x2 = st.columns(2)
-            with x1:
-                show(work, f"Original · {base:.1%}")
-            with x2:
-                show(pv, f"{k} {s:+.1f} · {float(aca_list([pv], primary)[0]):.1%}")
-
 
 # ============================== Error Analysis ==============================
 with tab_err:
