@@ -1042,7 +1042,7 @@ with tab_cmp:
     ]
     a5.legend(handles=legend_items, loc="lower right", frameon=True, fontsize=8)
 
-    st.pyplot(f5, use_container_width=True)
+    st.pyplot(f5, width="stretch")
     plt.close(f5)
 
     st.markdown(
@@ -1096,7 +1096,7 @@ with tab_cmp:
         for b, v in zip(bars, acc_vals):
             ax_train_acc.text(b.get_x() + b.get_width()/2, v + 0.08, f"{v:.2f}%", ha="center", va="bottom", fontsize=7.5)
         f_train_acc.tight_layout()
-        st.pyplot(f_train_acc, use_container_width=True)
+        st.pyplot(f_train_acc, width="stretch")
         plt.close(f_train_acc)
 
     with metric_cols[1]:
@@ -1111,7 +1111,7 @@ with tab_cmp:
         for b, v in zip(bars, f1_vals):
             ax_train_f1.text(b.get_x() + b.get_width()/2, v + 0.08, f"{v:.2f}%", ha="center", va="bottom", fontsize=7.5)
         f_train_f1.tight_layout()
-        st.pyplot(f_train_f1, use_container_width=True)
+        st.pyplot(f_train_f1, width="stretch")
         plt.close(f_train_f1)
 
     st.markdown("#### Training curves available")
@@ -1143,7 +1143,7 @@ with tab_cmp:
         acc_cols = st.columns(3)
         for i, plot_path in enumerate(accuracy_plots):
             with acc_cols[i % 3]:
-                st.image(str(plot_path), use_container_width=True, caption=plot_path.name)
+                st.image(str(plot_path), width="stretch", caption=plot_path.name)
     else:
         st.info("No per-model accuracy-curve PNGs were found in the project results folders.")
 
@@ -1152,7 +1152,7 @@ with tab_cmp:
         loss_cols = st.columns(3)
         for i, plot_path in enumerate(loss_plots):
             with loss_cols[i % 3]:
-                st.image(str(plot_path), use_container_width=True, caption=plot_path.name)
+                st.image(str(plot_path), width="stretch", caption=plot_path.name)
     else:
         st.info("No per-model loss-curve PNGs were found in the project results folders.")
 
