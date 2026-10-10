@@ -845,7 +845,7 @@ with tab_err:
                         for col, image_path in zip(cols, row):
                             with col:
                                 try:
-                                    st.image(str(image_path), use_container_width=True)
+                                    st.image(str(image_path), width="stretch")
                                     st.caption(image_path.stem)
                                 except Exception as exc:
                                     st.error(f"Could not load {image_path.name}: {exc}")
@@ -870,7 +870,7 @@ with tab_err:
                 for col, image_path in zip(cols, row):
                     with col:
                         try:
-                            st.image(str(image_path), use_container_width=True)
+                            st.image(str(image_path), width="stretch")
                             st.caption(image_path.stem)
                         except Exception as exc:
                             st.error(f"Could not load {image_path.name}: {exc}")
