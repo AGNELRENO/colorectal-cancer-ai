@@ -24,19 +24,26 @@ datasets/
 *.7z
 
 # =========================
-# Model Weights
+# Model Weights & Checkpoints
 # =========================
 *.pth
 *.pt
+*.h5
+*.pkl
+*.bin
+*.joblib
 *.ckpt
 *.onnx
 *.safetensors
+checkpoints/
+models/
+organized_models/
+saved_models/
 
 # =========================
-# Checkpoints
+# Streamlit Secrets & Local Config
 # =========================
-checkpoints/
-organized_models/
+.streamlit/secrets.toml
 
 # =========================
 # Generated Results
@@ -58,6 +65,7 @@ tensorboard/
 .cache/
 tmp/
 temp/
+scratch/
 
 # =========================
 # Environment Variables
@@ -66,9 +74,10 @@ temp/
 .env.*
 
 # =========================
-# VS Code
+# VS Code / IDEs
 # =========================
 .vscode/
+.idea/
 
 # =========================
 # Jupyter
